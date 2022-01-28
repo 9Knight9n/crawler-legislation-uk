@@ -5,7 +5,7 @@ a crawler for extracting all available acts in https://www.legislation.gov.uk/
 ## All available Data in legislation.gov.uk:
 * All Acts : extracted from https://www.legislation.gov.uk/all page
 * All Type : extracted from https://www.legislation.gov.uk/search page
-* Title
+* Title : extracted from act page
     * extract options:
       * act page
 * Year : extracted from ac each act url
@@ -16,18 +16,16 @@ a crawler for extracting all available acts in https://www.legislation.gov.uk/
     * all extract options:
       * act url
       * act page
-* Original or point-in-time or latest : not extracting for now
-    * extract options:
-      * act page
-* Geographical Extent
+
+* Geographical Extent : extracted from act page
 * whole act as txt and pdf
 * Explanatory Note :
-* Language : only extracting English (other language is Welsh. we don't need it :/ )
+* Language : only extracting English (other language is Welsh. Contains only 20 acts, we don't need it :/ )
 * Number : extracted from ac each act url
     * all extract options:
       * act url
       * act page
-* Numbering system : for now only default numbering is used
+* Numbering system : default numbering system is used
 * references to other acts
 
 
@@ -39,4 +37,3 @@ a crawler for extracting all available acts in https://www.legislation.gov.uk/
 
 
 ## Notice
-Only acts in English were loaded

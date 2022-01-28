@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-from extractors import headers,base_url
+from extract import headers,base_url
 
 url = base_url+"all?page="
 
@@ -22,8 +22,5 @@ def get_act_list_single_page(num):
     if num != int(current_page):
         return []
     acts_query = soup.select("td a")
-    acts = [x['href'].replace("/contents","") for x in acts_query]
+    acts = [x['href'].replace("/contents","")[1:] for x in acts_query]
     return list(dict.fromkeys(acts))
-
-
-print(get_act_list_single_page(1))
