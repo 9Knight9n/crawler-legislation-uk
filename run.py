@@ -21,6 +21,7 @@ while True:
         count+=1
         append_act(act)
         # break
+    # break
     # if page > 10:
     #     break
     if len(acts)==0:

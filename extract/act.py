@@ -25,7 +25,15 @@ def get_act_details(p_id):
     return {"extend":extend,'title':title,'note':"yes" if note_available else "no",'files':files}
 
 
-
+def get_links(url):
+    f = requests.get(url, headers=headers)
+    soup = BeautifulSoup(f.content, 'lxml')
+    links = []
+    tags =  soup.find_all("a")
+    for tag in tags:
+        if "href" in str(tag) and str(tag['href']).startswith(base_url):
+            links.append(tag['href'])
+    return links
 
 def get_extent(soup):
     extend = soup.find_all(class_ = "LegExtentRestriction")[0]

@@ -3,13 +3,15 @@ import requests
 import pandas as pd
 from openpyxl import load_workbook
 
-from extract.act import get_act_details
-from save import files_dir,act_list_dir
-
+from extract.act import get_act_details, get_links
+from save import files_dir, act_list_dir, ref_list_dir
 
 excel = pd.read_excel(act_list_dir,)
 wb = load_workbook(act_list_dir)
 ws = wb.worksheets[0]
+
+wb2 = load_workbook(ref_list_dir)
+ws2 = wb2.worksheets[0]
 
 
 def dl_file(url,name):
@@ -38,7 +40,15 @@ def append_act(p_id:str):
     # print(act_detail['files'].keys())
     for key in act_detail['files'].keys():
         dl_file(act_detail['files'][key],type_+"#"+year+"#"+num+key)
+    refs = get_links(act_detail['files']['.xht'])
+    for ref in refs:
+        add_links(p_id,ref)
 
+
+
+def add_links(p_id,link):
+    ws2.append([p_id, link])
+    wb2.save(ref_list_dir)
 
 
 
