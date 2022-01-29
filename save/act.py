@@ -1,8 +1,10 @@
 import os.path
 import requests
 import pandas as pd
+from bs4 import BeautifulSoup
 from openpyxl import load_workbook
 
+from extract import headers
 from extract.act import get_act_details, get_links
 from save import files_dir, act_list_dir, ref_list_dir
 
@@ -40,6 +42,13 @@ def append_act(p_id:str):
     # print(act_detail['files'].keys())
     for key in act_detail['files'].keys():
         dl_file(act_detail['files'][key],type_+"#"+year+"#"+num+key)
+        if "xht" in key:
+            f = requests.get(act_detail['files'][key], headers=headers)
+            soup = BeautifulSoup(f.content, 'lxml')
+            text_file = open(files_dir+"/"+type_+"#"+year+"#"+num+key[:-3]+"txt", "w")
+            text_file.write(soup.get_text())
+            text_file.close()
+
     refs = get_links(act_detail['files']['.xht'])
     for ref in refs:
         add_links(p_id,ref)
