@@ -43,7 +43,11 @@ def get_links(url):
     return links
 
 def get_extent(soup):
-    extend = soup.find_all(class_ = "LegExtentRestriction")[0]
+    extend = soup.find_all(class_ = "LegExtentRestriction")
+    if len(extend)>0:
+        extend = extend[0]
+    else:
+        return ""
     return extend.get_text()
 
 def get_title(soup):
