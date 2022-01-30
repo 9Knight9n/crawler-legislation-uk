@@ -5,8 +5,9 @@ from bs4 import BeautifulSoup
 from openpyxl import load_workbook
 
 from extract import headers
-from extract.act import get_act_details, get_links
+from extract.act import get_act_details, get_links, get_txt
 from save import files_dir, act_list_dir, ref_list_dir
+from utils import fix_dir_name
 
 excel = pd.read_excel(act_list_dir,)
 wb = load_workbook(act_list_dir)
@@ -37,16 +38,16 @@ def append_act(p_id:str):
         return
     act_detail = get_act_details(p_id)
     # print(act_detail)
-    ws.append([type_,year,num,act_detail['title'],act_detail['extend'],act_detail['note']])
+    title = fix_dir_name(act_detail['title'])
+    ws.append([type_,year,num,title,act_detail['extend'],act_detail['note']])
     wb.save(act_list_dir)
     # print(act_detail['files'].keys())
     for key in act_detail['files'].keys():
-        dl_file(act_detail['files'][key],type_+"#"+year+"#"+num+key)
+        dl_file(act_detail['files'][key],title+key)
         if "xht" in key:
-            f = requests.get(act_detail['files'][key], headers=headers)
-            soup = BeautifulSoup(f.content, 'lxml')
-            text_file = open(files_dir+"/"+type_+"#"+year+"#"+num+key[:-3]+"txt", "w")
-            text_file.write(soup.get_text())
+            txt = get_txt(act_detail['files'][key])
+            text_file = open(files_dir+"/"+title + key[:-3] + "txt", "w")
+            text_file.write(txt)
             text_file.close()
 
     refs = get_links(act_detail['files']['.xht'])

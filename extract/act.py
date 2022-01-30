@@ -25,6 +25,13 @@ def get_act_details(p_id):
     return {"extend":extend,'title':title,'note':"yes" if note_available else "no",'files':files}
 
 
+def get_txt(url):
+    f = requests.get(url, headers=headers)
+    soup = BeautifulSoup(f.content, 'lxml')
+    return soup.get_text()
+
+
+
 def get_links(url):
     f = requests.get(url, headers=headers)
     soup = BeautifulSoup(f.content, 'lxml')
