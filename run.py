@@ -16,10 +16,18 @@ page = int(page)
 count=0
 
 while True:
-    acts = get_act_list_single_page(page)
+    try:
+        acts = get_act_list_single_page(page)
+    except:
+        print(f'error fetching page {page}')
+        continue
     for index_,act in enumerate(acts):
-        count+=1
-        append_act(act)
+        try:
+            count+=1
+            append_act(act)
+        except:
+            print(f'error fetching act {act}')
+            continue
         # break
     # break
     # if page > 10:
