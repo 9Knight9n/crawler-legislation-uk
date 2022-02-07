@@ -7,7 +7,7 @@ from openpyxl import load_workbook
 from extract import headers
 from extract.act import get_act_details, get_links, get_txt
 from save import files_dir, act_list_dir, ref_list_dir
-from utils import fix_dir_name
+from utils import fix_dir_name, trim
 
 excel = pd.read_excel(act_list_dir,)
 wb = load_workbook(act_list_dir)
@@ -39,14 +39,14 @@ def append_act(p_id:str):
     act_detail = get_act_details(p_id)
     # print(act_detail)
     title = fix_dir_name(act_detail['title'])
-    ws.append([type_,year,num,title,act_detail['extend'],act_detail['note']])
+    ws.append([trim(type_),trim(year),trim(num),trim(title),trim(act_detail['extend']),trim(act_detail['note'])])
     wb.save(act_list_dir)
     # print(act_detail['files'].keys())
     for key in act_detail['files'].keys():
-        dl_file(act_detail['files'][key],title+key)
+        dl_file(act_detail['files'][key],trim(title)+key)
         if "xht" in key:
             txt = get_txt(act_detail['files'][key])
-            text_file = open(files_dir+"/"+title + key[:-3] + "txt", "w")
+            text_file = open(files_dir+"/"+trim(title) + key[:-3] + "txt", "w")
             text_file.write(txt)
             text_file.close()
 

@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from extract import headers,base_url
 
-url = base_url+"all?page="
+url = base_url+"primary?page="
 
 # def get_act_list():
 #     f = requests.get(url, headers=headers)

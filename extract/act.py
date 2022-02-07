@@ -51,7 +51,8 @@ def get_extent(soup):
     return extend.get_text()
 
 def get_title(soup):
-    title = soup.select("#pageTitle span")[0]
+    # print(soup.prettify())
+    title = soup.select("#pageTitle")[0]
     return title.get_text()
 
 def get_dl_act_url(p_id,file_type):

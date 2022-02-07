@@ -28,14 +28,14 @@ while True:
         print(f'error fetching page {page}')
         continue
     for index_,act in enumerate(acts):
-        try:
-            count+=1
-            append_act(act)
-        except KeyboardInterrupt or SystemExit:
-            stored_exception = sys.exc_info()
-        except:
-            print(f'error fetching act {act}')
-            continue
+        # try:
+        count+=1
+        append_act(act)
+        # except KeyboardInterrupt or SystemExit:
+        #     stored_exception = sys.exc_info()
+        # except:
+        #     print(f'error fetching act {act}')
+        #     continue
     if stored_exception:
         break
         # break
