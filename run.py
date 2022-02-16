@@ -24,7 +24,7 @@ ws = wb.worksheets[0]
 
 for index,url in enumerate(urls):
     print(f"started fetching '{base_url}{url}' ...")
-    page_file_dir = fetched_urls_dir + f"/url_{index}.txt"
+    page_file_dir = fetched_urls_dir + f"/url_{url}.txt"
     if not os.path.isfile(page_file_dir):
         f = open(page_file_dir, "w")
         f.write(str(1) + "\n")
@@ -48,8 +48,8 @@ for index,url in enumerate(urls):
             continue
         for index_, act in enumerate(acts):
             try:
-                if count > 100:
-                    break
+                # if count > 100:
+                #     break
                 count += 1
                 status = append_act(act)
                 if status is None:
@@ -68,8 +68,8 @@ for index,url in enumerate(urls):
         # break
         # if page > 10:
         #     break
-        if count > 100:
-            break
+        # if count > 100:
+        #     break
         if len(acts) == 0:
             break
         page += 1
