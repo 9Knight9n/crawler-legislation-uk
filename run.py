@@ -10,12 +10,12 @@ from openpyxl import load_workbook
 from utils import trim
 
 urls=[
-    # "ukpga",
-    # "ukla",
-    # "ukcm",
+    "ukpga",
+    "ukla",
+    "ukcm",
     "uksi",
-    # "ukci",
-    # "uksro",
+    "ukci",
+    "uksro",
 ]
 
 excel = pd.read_excel(skipped_files_list_dir,)
