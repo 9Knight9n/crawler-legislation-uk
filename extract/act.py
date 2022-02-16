@@ -13,15 +13,16 @@ def get_act_details(p_id):
     soup = BeautifulSoup(f.content, 'lxml')
     extend = get_extent(soup)
     title = get_title(soup)
-    pdf=get_dl_act_url(p_id,"pdf")
+    # pdf=get_dl_act_url(p_id,"pdf")
     xht=get_dl_act_url(p_id,"xht?view=snippet&wrap=true")
-    note_pdf=get_dl_act_note_url(p_id,"pdf")
-    note_xht=get_dl_act_note_url(p_id,"xht?view=snippet&wrap=true")
-    files = {'.pdf':pdf,'.xht':xht}
+    # note_pdf=get_dl_act_note_url(p_id,"pdf")
+    # note_xht=get_dl_act_note_url(p_id,"xht?view=snippet&wrap=true")
+    # files = {'.pdf':pdf,'.xht':xht}
+    files = {'.xht':xht}
     note_available = is_note_available(soup)
-    if note_available:
-        files['#note.pdf']=note_pdf
-        files['#note.xht']=note_xht
+    # if note_available:
+    #     files['#note.pdf']=note_pdf
+    #     files['#note.xht']=note_xht
     return {"extend":extend,'title':title,'note':"yes" if note_available else "no",'files':files}
 
 

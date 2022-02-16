@@ -6,15 +6,16 @@ from openpyxl import load_workbook
 
 from extract import headers
 from extract.act import get_act_details, get_links, get_txt
-from save import files_dir, act_list_dir, ref_list_dir
+from extract.detector import detect_type
+from save import files_dir, files_list_dir
 from utils import fix_dir_name, trim
 
-excel = pd.read_excel(act_list_dir,)
-wb = load_workbook(act_list_dir)
+excel = pd.read_excel(files_list_dir,)
+wb = load_workbook(files_list_dir)
 ws = wb.worksheets[0]
 
-wb2 = load_workbook(ref_list_dir)
-ws2 = wb2.worksheets[0]
+# wb2 = load_workbook(ref_list_dir)
+# ws2 = wb2.worksheets[0]
 
 
 def dl_file(url,name):
@@ -35,24 +36,27 @@ def append_act(p_id:str):
     num = temp[2]
     if already_added(type_, year, num):
         print(f'Act {p_id} already loaded.')
-        return
+        return True
     act_detail = get_act_details(p_id)
-    # print(act_detail)
     title = fix_dir_name(act_detail['title'])
+    type_ = detect_type(type_,title)
+    if type_ is None:
+        print(f'Act {p_id} is not  included in accepted types.')
+        return None
     ws.append([trim(type_),trim(year),trim(num),trim(title),trim(act_detail['extend']),trim(act_detail['note'])])
-    wb.save(act_list_dir)
-    # print(act_detail['files'].keys())
+    wb.save(files_list_dir)
     for key in act_detail['files'].keys():
-        dl_file(act_detail['files'][key],trim(title)+key)
+        # dl_file(act_detail['files'][key],trim(title)+key)
         if "xht" in key:
             txt = get_txt(act_detail['files'][key])
             text_file = open(files_dir+"/"+trim(title) + key[:-3] + "txt", "w")
             text_file.write(txt)
             text_file.close()
 
-    refs = get_links(act_detail['files']['.xht'])
-    for ref in refs:
-        add_links(p_id,ref)
+    # refs = get_links(act_detail['files']['.xht'])
+    # for ref in refs:
+    #     add_links(p_id,ref)
+    return True
 
 
 

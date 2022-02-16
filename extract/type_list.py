@@ -14,3 +14,4 @@ def get_type_list():
 
 
 
+print(get_type_list())
