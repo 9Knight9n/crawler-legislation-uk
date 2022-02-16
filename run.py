@@ -48,6 +48,8 @@ for index,url in enumerate(urls):
             continue
         for index_, act in enumerate(acts):
             try:
+                if count > 100:
+                    break
                 count += 1
                 status = append_act(act)
                 if status is None:
@@ -66,6 +68,8 @@ for index,url in enumerate(urls):
         # break
         # if page > 10:
         #     break
+        if count > 100:
+            break
         if len(acts) == 0:
             break
         page += 1
