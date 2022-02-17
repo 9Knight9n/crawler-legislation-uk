@@ -48,6 +48,7 @@ def append_act(p_id:str):
         return None
     ws.append([trim(type_),trim(year),trim(num),trim(title),trim(act_detail['extend']),trim(act_detail['note'])])
     wb.save(files_list_dir)
+    downloaded = False
     for key in act_detail['files'].keys():
         status = dl_file(act_detail['files'][key],trim(title)+key,key.replace(".",""))
         if status is None:
@@ -57,11 +58,12 @@ def append_act(p_id:str):
             text_file = open(txt_files_dir+"/"+trim(title) + key[:-3] + "txt", "w")
             text_file.write(txt)
             text_file.close()
+            downloaded = True
 
     # refs = get_links(act_detail['files']['.xht'])
     # for ref in refs:
     #     add_links(p_id,ref)
-    return True
+    return downloaded
 
 
 
