@@ -27,6 +27,7 @@ def detect_type(_type,title):
         return None
 
 def detect_uksi_type(title:str):
+    temp = title
     title = title.lower()
     title = title.replace("order of","",len(title))
     indices = []
@@ -34,6 +35,8 @@ def detect_uksi_type(title:str):
         indices.append(title.rfind(uksi_.lower()))
     max_ = indices.index(max(indices))
     if max(indices) == -1:
+        if temp.rfind("order") != -1:
+            return uksi[0]
         return "نامشخص"
     return uksi[max_]
 
