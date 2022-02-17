@@ -18,14 +18,17 @@ ws = wb.worksheets[0]
 # ws2 = wb2.worksheets[0]
 
 
-def dl_file(url,name):
-    path = files_dir+"/"+name
+def dl_file(url,name,_dir):
+    path = files_dir+"/"+_dir+"/"+name
     if os.path.isfile(files_dir+"/"+name):
         print(f'file {url} already exist as {path} .skipping...')
         return
-    r = requests.get(url)
-    open(files_dir+"/"+name, 'wb').write(r.content)
-
+    try:
+        r = requests.get(url)
+        open(path, 'wb').write(r.content)
+    except:
+        return None
+    return True
 
 
 
@@ -46,7 +49,9 @@ def append_act(p_id:str):
     ws.append([trim(type_),trim(year),trim(num),trim(title),trim(act_detail['extend']),trim(act_detail['note'])])
     wb.save(files_list_dir)
     for key in act_detail['files'].keys():
-        # dl_file(act_detail['files'][key],trim(title)+key)
+        status = dl_file(act_detail['files'][key],trim(title)+key,key.replace(".",""))
+        if status is None:
+            continue
         if "xht" in key:
             txt = get_txt(act_detail['files'][key])
             text_file = open(txt_files_dir+"/"+trim(title) + key[:-3] + "txt", "w")
