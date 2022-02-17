@@ -13,9 +13,9 @@ urls=[
     "ukpga",
     "ukla",
     "ukcm",
-    "uksi",
     "ukci",
     "uksro",
+    "uksi",
 ]
 
 excel = pd.read_excel(skipped_files_list_dir,)
