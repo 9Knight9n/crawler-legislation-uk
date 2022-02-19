@@ -31,16 +31,35 @@ def dl_file(url,name,_dir):
     return True
 
 
+def already_added(type_,year,num):
+    t_index = -1
+    y_index = -1
+    n_index = -1
+    for index , t in enumerate(excel['type']):
+        if t==type_:
+            t_index = index
+    for index , t in enumerate(excel['year']):
+        if str(t)==year:
+            y_index = index
+    for index , t in enumerate(excel['number']):
+        if str(t)==num:
+            n_index = index
+    if t_index == y_index and t_index==n_index and t_index != -1:
+        return True
+    else:
+        return False
 
-def append_act(p_id:str):
-    temp = p_id.split("/")
+
+
+def append_act(p_id:dict):
+    temp = p_id['pid'].split("/")
     type_ = temp[0]
-    year = temp[1]
-    num = temp[2]
+    year = p_id['year']
+    num = p_id['number']
     if already_added(type_, year, num):
         print(f'Act {p_id} already loaded.')
         return True
-    act_detail = get_act_details(p_id)
+    act_detail = get_act_details(p_id['pid'])
     title = fix_dir_name(act_detail['title'])
     type_ = detect_type(type_,title)
     if type_ is None:
@@ -65,6 +84,9 @@ def append_act(p_id:str):
 
 
 
+# append_act("ukpga/Edw7/6/14")
+# append_act("uksi/2015/1561")
+
 # def add_links(p_id,link):
 #     ws2.append([p_id, link])
 #     wb2.save(ref_list_dir)
@@ -72,23 +94,7 @@ def append_act(p_id:str):
 
 
 
-def already_added(type_,year,num):
-    t_index = -1
-    y_index = -1
-    n_index = -1
-    for index , t in enumerate(excel['type']):
-        if t==type_:
-            t_index = index
-    for index , t in enumerate(excel['year']):
-        if str(t)==year:
-            y_index = index
-    for index , t in enumerate(excel['number']):
-        if str(t)==num:
-            n_index = index
-    if t_index == y_index and t_index==n_index and t_index != -1:
-        return True
-    else:
-        return False
+
 
 
 
