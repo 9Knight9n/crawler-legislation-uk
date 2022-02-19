@@ -49,14 +49,36 @@ for index,url in enumerate(urls):
         for index_, act in enumerate(acts):
             try:
 
-                count += 1
+                # count += 1
                 status = append_act(act)
                 if status is None:
                     ws.append([trim(base_url+act)])
                     wb.save(skipped_files_list_dir)
-                if count > 320:
-                    break
                 count += 1
+                if index==0:
+                    if count == 320:
+                        stored_exception = "None"
+                        break
+                elif index==1:
+                    if count == 60:
+                        stored_exception = "None"
+                        break
+                elif index==2:
+                    if count == 40:
+                        stored_exception = "None"
+                        break
+                elif index==3:
+                    if count == 20:
+                        stored_exception = "None"
+                        break
+                elif index==4:
+                    if count == 60:
+                        stored_exception = "None"
+                        break
+                elif index==5:
+                    if count == 500:
+                        stored_exception = "None"
+                        break
             except KeyboardInterrupt or SystemExit:
                 stored_exception = sys.exc_info()
             except:
@@ -85,7 +107,8 @@ for index,url in enumerate(urls):
         print(f'total processed acts :{count}')
 
     if stored_exception:
-        raise stored_exception[0](stored_exception[1]).with_traceback(stored_exception[2])
+        if stored_exception != "None":
+            raise stored_exception[0](stored_exception[1]).with_traceback(stored_exception[2])
 
     print(f"finished fetching '{base_url}{url}' ...")
 
