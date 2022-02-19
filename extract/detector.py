@@ -8,9 +8,9 @@ accepted_types = {
 }
 
 uksi = [
-    "Order",
-    "Regulation",
-    "Rule",
+    "Orders",
+    "Regulations",
+    "Rules",
     "Scheme",
     "Direction",
     "Declaration",
@@ -29,14 +29,14 @@ def detect_type(_type,title):
 def detect_uksi_type(title:str):
     temp = title
     title = title.lower()
-    title = title.replace("order of","",len(title))
+    # title = title.replace("order of","",len(title))
     indices = []
     for uksi_ in uksi:
         indices.append(title.rfind(uksi_.lower()))
     max_ = indices.index(max(indices))
     if max(indices) == -1:
-        if temp.rfind("order") != -1:
-            return uksi[0]
+        # if temp.rfind("order") != -1:
+        #     return uksi[0]
         return "نامشخص"
     return uksi[max_]
 
