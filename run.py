@@ -10,19 +10,19 @@ from openpyxl import load_workbook
 from utils import trim
 
 urls=[
-    # "ukpga",
-    # "ukla",
-    # "ukcm",
-    # "ukci",
-    # "uksro",
+    "ukpga",
+    "ukla",
+    "ukcm",
+    "ukci",
+    "uksro",
     "uksi",
 ]
 urls_max=[
-    # 260,
-    # 60,
-    # 40,
-    # 20,
-    # 60,
+    260,
+    60,
+    40,
+    20,
+    60,
     560
 ]
 
