@@ -10,12 +10,12 @@ from openpyxl import load_workbook
 from utils import trim
 
 urls=[
-    "ukpga",
-    "ukla",
-    "ukcm",
-    "ukci",
-    "uksro",
-    "uksi",
+    "ukpga",#320
+    "ukla",#60
+    "ukcm",#40
+    "ukci",#20
+    "uksro",#60
+    "uksi",#500
 ]
 
 excel = pd.read_excel(skipped_files_list_dir,)
@@ -48,13 +48,15 @@ for index,url in enumerate(urls):
             continue
         for index_, act in enumerate(acts):
             try:
-                # if count > 100:
-                #     break
+
                 count += 1
                 status = append_act(act)
                 if status is None:
                     ws.append([trim(base_url+act)])
                     wb.save(skipped_files_list_dir)
+                if count > 320:
+                    break
+                count += 1
             except KeyboardInterrupt or SystemExit:
                 stored_exception = sys.exc_info()
             except:
