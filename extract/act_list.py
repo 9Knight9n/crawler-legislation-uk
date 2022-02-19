@@ -12,11 +12,16 @@ def get_act_list_single_page(url,num):
         return []
     acts_query = soup.select("#content tbody tr")
     acts=[]
+    last = ["",""]
     for tr in acts_query:
         act = {}
         a = tr.select("td a")
         act['pid'] = a[0]['href'].replace("/contents","")[1:]
-        temp = a[1].get_text().split(" ")
+        if len(a)>1:
+            temp = a[1].get_text().split(" ")
+            last=temp
+        else:
+            temp = last
         act['year'] = temp[0]
         act['number'] = temp[1]
         acts.append(act)
