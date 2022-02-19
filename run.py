@@ -10,15 +10,20 @@ from openpyxl import load_workbook
 from utils import trim
 
 urls=[
-    "ukpga",
-    "ukla",
-    "ukcm",
-    "ukci",
-    "uksro",
+    # "ukpga",
+    # "ukla",
+    # "ukcm",
+    # "ukci",
+    # "uksro",
     "uksi",
 ]
 urls_max=[
-    260,60,40,20,60,560
+    # 260,
+    # 60,
+    # 40,
+    # 20,
+    # 60,
+    560
 ]
 
 excel = pd.read_excel(skipped_files_list_dir,)
@@ -57,6 +62,7 @@ for index,url in enumerate(urls):
                 if status is None:
                     ws.append([trim(base_url+act)])
                     wb.save(skipped_files_list_dir)
+                    continue
                 count += 1
                 if count == urls_max[index]:
                     stored_exception = "None"
@@ -64,8 +70,8 @@ for index,url in enumerate(urls):
             except KeyboardInterrupt or SystemExit:
                 stored_exception = sys.exc_info()
             except:
-                print(f'error fetching act {act}')
-                ws.append([trim(base_url + act)])
+                print(f'error fetching act {act["pid"]}')
+                ws.append([trim(base_url + act['pid'])])
                 wb.save(skipped_files_list_dir)
                 continue
         if stored_exception:

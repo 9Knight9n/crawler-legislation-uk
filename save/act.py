@@ -63,7 +63,7 @@ def append_act(p_id:dict):
     title = fix_dir_name(act_detail['title'])
     type_ = detect_type(type_,title)
     if type_ is None:
-        print(f'Act {p_id} is not  included in accepted types.')
+        print(f'Act {p_id["pid"]} is not  included in accepted types.')
         return None
     downloaded = None
     for key in act_detail['files'].keys():
