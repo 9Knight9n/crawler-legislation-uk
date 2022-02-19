@@ -58,7 +58,7 @@ for index,url in enumerate(urls):
                     ws.append([trim(base_url+act)])
                     wb.save(skipped_files_list_dir)
                 count += 1
-                if count == urls_max[index_]:
+                if count == urls_max[index]:
                     stored_exception = "None"
                     break
             except KeyboardInterrupt or SystemExit:
