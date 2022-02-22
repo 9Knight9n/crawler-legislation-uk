@@ -29,7 +29,7 @@ def get_act_details(p_id):
 def get_txt(url):
     f = requests.get(url, headers=headers)
     soup = BeautifulSoup(f.content, 'lxml')
-    return soup.get_text()
+    return soup
 
 
 

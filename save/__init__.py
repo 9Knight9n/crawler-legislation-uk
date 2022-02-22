@@ -10,6 +10,7 @@ skipped_files_list_dir = base_dir+"/skipped_files.xlsx"
 files_dir = base_dir+"/files"
 fetched_urls_dir = base_dir+"/fetched_pages"
 txt_files_dir = files_dir+"/txt"
+txt_files_dir_converted = files_dir+"/txt_converted"
 xht_files_dir = files_dir+"/xht"
 pdf_files_dir = files_dir+"/pdf"
 
@@ -24,6 +25,9 @@ if not os.path.isdir(fetched_urls_dir):
 
 if not os.path.isdir(txt_files_dir):
     os.mkdir(txt_files_dir)
+
+if not os.path.isdir(txt_files_dir_converted):
+    os.mkdir(txt_files_dir_converted)
 
 if not os.path.isdir(xht_files_dir):
     os.mkdir(xht_files_dir)

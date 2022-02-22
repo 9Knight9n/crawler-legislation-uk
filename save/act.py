@@ -7,8 +7,8 @@ from openpyxl import load_workbook
 from extract import headers
 from extract.act import get_act_details, get_links, get_txt
 from extract.detector import detect_type
-from save import files_dir, files_list_dir, txt_files_dir
-from utils import fix_dir_name, trim
+from save import files_dir, files_list_dir, txt_files_dir, txt_files_dir_converted
+from utils import fix_dir_name, trim, convert_xht_to_txt_2
 
 excel = pd.read_excel(files_list_dir,)
 wb = load_workbook(files_list_dir)
@@ -64,17 +64,21 @@ def append_act(p_id:dict):
     type_ = detect_type(type_,title)
     if type_ is None:
         print(f'Act {p_id["pid"]} is not  included in accepted types.')
-        return None
+        return True
     downloaded = None
     for key in act_detail['files'].keys():
-        status = dl_file(act_detail['files'][key],trim(title)+key,key.replace(".",""))
-        if status is None:
-            continue
+        # status = dl_file(act_detail['files'][key],trim(title)+key,key.replace(".",""))
+        # if status is None:
+        #     continue
         if "xht" in key:
             txt = get_txt(act_detail['files'][key])
-            text_file = open(txt_files_dir+"/"+trim(title) + key[:-3] + "txt", "w")
-            text_file.write(txt)
-            text_file.close()
+            text = convert_xht_to_txt_2(str(txt))
+            if len(text) == 0:
+                continue
+            f = open(txt_files_dir+"/"+trim(title) + key[:-3] + "txt", "w")
+            for line in text:
+                f.write(line)
+            f.close()
             downloaded = True
 
     if downloaded:
