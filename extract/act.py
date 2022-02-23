@@ -29,6 +29,9 @@ def get_act_details(p_id):
 def get_txt(url):
     f = requests.get(url, headers=headers)
     soup = BeautifulSoup(f.content, 'lxml')
+    # kill all script and style elements
+    for script in soup(["script", "style", "head"]):
+        script.extract()  # rip it out
     return soup
 
 

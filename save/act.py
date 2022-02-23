@@ -56,14 +56,14 @@ def append_act(p_id:dict):
     type_ = temp[0]
     year = p_id['year']
     num = p_id['number']
-    if already_added(type_, year, num):
-        print(f'Act {p_id} already loaded.')
-        return True
     act_detail = get_act_details(p_id['pid'])
     title = fix_dir_name(act_detail['title'])
     type_ = detect_type(type_,title)
     if type_ is None:
         print(f'Act {p_id["pid"]} is not  included in accepted types.')
+        return True
+    if already_added(trim(type_), trim(year), trim(num)):
+        print(f'Act {p_id} already loaded.')
         return True
     downloaded = None
     for key in act_detail['files'].keys():
