@@ -4,7 +4,7 @@ import pandas as pd
 from bs4 import BeautifulSoup
 from openpyxl import load_workbook
 
-from extract import headers
+from extract import headers, base_url
 from extract.act import get_act_details, get_links, get_txt
 from extract.detector import detect_type
 from save import files_dir, files_list_dir, txt_files_dir, txt_files_dir_converted
@@ -54,41 +54,51 @@ def already_added(title_):
 
 
 def append_act(p_id:dict):
-    temp = p_id['pid'].split("/")
-    type_ = temp[0]
-    year = p_id['year']
-    num = p_id['number']
-    act_detail = get_act_details(p_id['pid'])
-    title = fix_dir_name(act_detail['title'])
-    if already_added(trim(title)):
-        print(f'Act {p_id["pid"]} already loaded.')
-        return True
-    type_ = detect_type(type_,title)
-    if type_ is None:
-        print(f'Act {p_id["pid"]} is not  included in accepted types.')
-        return None
+    # temp = p_id['pid'].split("/")
+    # type_ = temp[0]
+    # year = p_id['year']
+    # num = p_id['number']
+    # act_detail = get_act_details(p_id['pid'])
+    title = fix_dir_name(p_id['title'].strip())
+    # if already_added(trim(title)):
+    #     print(f'Act {p_id["pid"]} already loaded.')
+    #     return True
+    # type_ = detect_type(type_,title)
+    # if type_ is None:
+    #     print(f'Act {p_id["pid"]} is not  included in accepted types.')
+    #     return None
     # print({p_id["pid"]})
-    downloaded = None
-    for key in act_detail['files'].keys():
+    # downloaded = None
+    # for key in act_detail['files'].keys():
         # status = dl_file(act_detail['files'][key],trim(title)+key,key.replace(".",""))
         # if status is None:
         #     continue
-        if "xht" in key:
+        # if "xht" in key:
             # print(act_detail['files'][key])
-            txt = get_txt(act_detail['files'][key])
-            text = convert_xht_to_txt_2(str(txt))
-            if len(text) == 0:
-                continue
-            f = open(txt_files_dir+"/"+trim(title) + key[:-3] + "txt", "w")
-            for line in text:
-                f.write(line)
-            f.close()
-            downloaded = True
+            # txt = get_txt(act_detail['files'][key])
+            # text = convert_xht_to_txt_2(str(txt))
+            # if len(text) == 0:
+            #     continue
+            # f = open(txt_files_dir+"/"+trim(title) + key[:-3] + "txt", "w")
+            # for line in text:
+            #     f.write(line)
+            # f.close()
+            # downloaded = True
 
-    if downloaded:
-        ws.append([trim(type_), trim(year), trim(num), trim(title), trim(act_detail['extend']), trim(act_detail['note'])])
-        wb.save(files_list_dir)
-    return downloaded
+    # if downloaded:
+    #     ws.append([trim(type_), trim(year), trim(num), trim(title), trim(act_detail['extend']), trim(act_detail['note'])])
+    #     wb.save(files_list_dir)
+
+    txt = get_txt(base_url+p_id['url'])
+    text = convert_xht_to_txt_2(str(txt))
+    if len(text) == 0:
+        return False
+    f = open(txt_files_dir+"/"+trim(title) + ".txt", "w")
+    for line in text:
+        f.write(line)
+    f.close()
+
+    return True
 
 
 
