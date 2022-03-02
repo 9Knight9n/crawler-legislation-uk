@@ -9,7 +9,9 @@ def is_note_available(soup):
 
 def get_act_details(p_id):
     url = base_url + p_id + "?view=extent"
+    # print(url)
     f = requests.get(url, headers=headers)
+    # print(f.content)
     soup = BeautifulSoup(f.content, 'lxml')
     extend = get_extent(soup)
     title = get_title(soup)

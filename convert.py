@@ -1,8 +1,8 @@
-from os import listdir
-from os.path import isfile, join
-
-from save import xht_files_dir, txt_files_dir_converted
-from utils import convert_xht_to_txt,convert_xht_to_txt_2
+# from os import listdir
+# from os.path import isfile, join
+#
+# from save import xht_files_dir, txt_files_dir_converted
+# from utils import convert_xht_to_txt,convert_xht_to_txt_2
 
 # only_files = [f for f in listdir(xht_files_dir) if isfile(join(xht_files_dir, f))]
 
@@ -27,3 +27,12 @@ from utils import convert_xht_to_txt,convert_xht_to_txt_2
 # for line in text:
 #     f.write(line)
 # f.close()
+# import re
+#
+# regexes = [
+#     r'“.*”',
+#
+# ]
+#
+# pair = re.compile(regexes[0])
+# print(pair.search('““dalam means”dwdw'))

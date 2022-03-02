@@ -37,4 +37,5 @@ def convert_xht_to_txt_2(html):
     h = html2text.HTML2Text()
     h.ignore_links = True
     # print(h.handle(html))
-    return trim(h.handle(html))
+    text = h.handle(html)
+    return trim(text.replace('xmlns:atom="http://www.w3.org/2005/Atom"',''))

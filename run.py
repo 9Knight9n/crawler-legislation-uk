@@ -18,12 +18,12 @@ urls=[
     "uksi",
 ]
 urls_max=[
-    260,
-    60,
-    40,
-    20,
-    60,
-    560
+    4000,
+    4000,
+    4000,
+    4000,
+    4000,
+    4000,
 ]
 
 excel = pd.read_excel(skipped_files_list_dir,)
@@ -56,8 +56,8 @@ for index,url in enumerate(urls):
             continue
         for index_, act in enumerate(acts):
             try:
-
                 # count += 1
+                # print(f'fetching {act}')
                 status = append_act(act)
                 if status is None:
                     ws.append([trim(base_url+act)])

@@ -31,23 +31,25 @@ def dl_file(url,name,_dir):
     return True
 
 
-def already_added(type_,year,num):
-    t_index = -1
-    y_index = -1
-    n_index = -1
-    for index , t in enumerate(excel['type']):
-        if t==type_:
-            t_index = index
-    for index , t in enumerate(excel['year']):
-        if str(t)==year:
-            y_index = index
-    for index , t in enumerate(excel['number']):
-        if str(t)==num:
-            n_index = index
-    if t_index == y_index and t_index==n_index and t_index != -1:
-        return True
-    else:
-        return False
+def already_added(title_):
+    result_count = len(excel.loc[excel['title'] == title_])
+    return result_count > 0
+    # t_index = -1
+    # y_index = -1
+    # n_index = -1
+    # for index , t in enumerate(excel['type']):
+    #     if str(t)==type_:
+    #         t_index = index
+    # for index , t in enumerate(excel['year']):
+    #     if str(t)==year:
+    #         y_index = index
+    # for index , t in enumerate(excel['number']):
+    #     if str(t)==num:
+    #         n_index = index
+    # if t_index == y_index and t_index==n_index and t_index != -1:
+    #     return True
+    # else:
+    #     return False
 
 
 
@@ -58,19 +60,21 @@ def append_act(p_id:dict):
     num = p_id['number']
     act_detail = get_act_details(p_id['pid'])
     title = fix_dir_name(act_detail['title'])
+    if already_added(trim(title)):
+        print(f'Act {p_id["pid"]} already loaded.')
+        return True
     type_ = detect_type(type_,title)
     if type_ is None:
         print(f'Act {p_id["pid"]} is not  included in accepted types.')
-        return True
-    if already_added(trim(type_), trim(year), trim(num)):
-        print(f'Act {p_id} already loaded.')
-        return True
+        return None
+    # print({p_id["pid"]})
     downloaded = None
     for key in act_detail['files'].keys():
         # status = dl_file(act_detail['files'][key],trim(title)+key,key.replace(".",""))
         # if status is None:
         #     continue
         if "xht" in key:
+            # print(act_detail['files'][key])
             txt = get_txt(act_detail['files'][key])
             text = convert_xht_to_txt_2(str(txt))
             if len(text) == 0:
