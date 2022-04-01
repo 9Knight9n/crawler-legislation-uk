@@ -10,20 +10,20 @@ from openpyxl import load_workbook
 from utils import trim
 
 urls=[
-    "ukpga",
-    "ukla",
-    "ukcm",
-    "ukci",
-    "uksro",
+    # "ukpga",
+    # "ukla",
+    # "ukcm",
+    # "ukci",
+    # "uksro",
     "uksi",
 ]
 urls_max=[
-    4000,
-    4000,
-    4000,
-    4000,
-    4000,
-    4000,
+    # 4000,
+    # 4000,
+    # 4000,
+    # 4000,
+    # 4000,
+    10,
 ]
 
 excel = pd.read_excel(skipped_files_list_dir,)
@@ -31,7 +31,6 @@ wb = load_workbook(skipped_files_list_dir)
 ws = wb.worksheets[0]
 
 for index,url in enumerate(urls):
-    print(f"started fetching '{base_url}{url}' ...")
     page_file_dir = fetched_urls_dir + f"/url_{url}.txt"
     if not os.path.isfile(page_file_dir):
         f = open(page_file_dir, "w")
@@ -41,6 +40,7 @@ for index,url in enumerate(urls):
     page = file.readline()
     file.close()
     page = int(page)
+    print(f"started fetching '{base_url}{url}' ...")
 
     count = 0
     stored_exception = None
@@ -49,6 +49,7 @@ for index,url in enumerate(urls):
         acts = []
         try:
             acts = get_act_list_single_page(url,page)
+            print(f'fetching page "{base_url}{url}?page={page}"')
         except KeyboardInterrupt or SystemExit:
             stored_exception = sys.exc_info()
         except:
