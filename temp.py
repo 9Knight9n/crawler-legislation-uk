@@ -1,8 +1,20 @@
+import sys
 import os
+
+sys.dont_write_bytecode = True
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings')
+import django
+
+django.setup()
+
+# Import your models for use in your script
+from db.models import *
 
 import pandas as pd
 
 from save import files_list_dir,txt_files_dir
+from save.act import save_txt
 
 
 def remove_files_with_type(type_:str):
@@ -21,7 +33,14 @@ def remove_files_with_type(type_:str):
 
 
 
+def create_files():
+    for act in Act.objects.all():
+        save_txt(act.title,act.text)
+
+
+
 
 if __name__ == '__main__':
-    remove_files_with_type("Church of England Measures")
-    remove_files_with_type("Church Instruments")
+    create_files()
+    # remove_files_with_type("Church of England Measures")
+    # remove_files_with_type("Church Instruments")

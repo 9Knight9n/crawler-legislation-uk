@@ -2,21 +2,17 @@ from bs4 import BeautifulSoup
 import html2text
 
 
-def fix_dir_name(name:str):
-    return name.replace("\\","-").replace("/","-").replace(":","-").replace("*","-")\
-        .replace('"',"-").replace("<","-").replace(">","-").replace("|","-").replace("?","-")
-
-def trim(string:str):
-    return string.strip()
+def fix_dir_name(name: str):
+    return name.replace("\\", "-").replace("/", "-").replace(":", "-").replace("*", "-") \
+        .replace('"', "-").replace("<", "-").replace(">", "-").replace("|", "-").replace("?", "-")
 
 
 def convert_xht_to_txt(html):
     soup = BeautifulSoup(html, features="html.parser")
 
     # kill all script and style elements
-    for script in soup(["script", "style","head"]):
+    for script in soup(["script", "style", "head"]):
         script.extract()  # rip it out
-
 
     # get text
     text = soup.get_text()
@@ -36,6 +32,5 @@ def convert_xht_to_txt(html):
 def convert_xht_to_txt_2(html):
     h = html2text.HTML2Text()
     h.ignore_links = True
-    # print(h.handle(html))
     text = h.handle(html)
-    return trim(text.replace('xmlns:atom="http://www.w3.org/2005/Atom"',''))
+    return text.replace('xmlns:atom="http://www.w3.org/2005/Atom"', '').strip()

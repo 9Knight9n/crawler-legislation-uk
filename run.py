@@ -1,99 +1,91 @@
 import sys
-import pandas as pd
-from extract import base_url
-from save import fetched_urls_dir, skipped_files_list_dir
-from save.act import append_act
-from extract.act_list import get_act_list_single_page
 import os
-from openpyxl import load_workbook
+import time
 
-from utils import trim
+sys.dont_write_bytecode = True
 
-urls=[
-    # "ukpga",
-    # "ukla",
-    # "ukcm",
-    # "ukci",
-    # "uksro",
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings')
+import django
+
+django.setup()
+
+# Import your models for use in your script
+from db.models import *
+from extract import base_url
+from extract.act import get_act_details, get_act_txt
+from extract.act_list import get_act_list_single_page
+
+urls = [
+    "ukpga",
+    "ukla",
     "uksi",
 ]
-urls_max=[
-    # 4000,
-    # 4000,
-    # 4000,
-    # 4000,
-    # 4000,
-    10,
+urls_max = [
+    90000,
+    90000,
+    90000,
 ]
 
-excel = pd.read_excel(skipped_files_list_dir,)
-wb = load_workbook(skipped_files_list_dir)
-ws = wb.worksheets[0]
+start = time.time()
 
-for index,url in enumerate(urls):
-    page_file_dir = fetched_urls_dir + f"/url_{url}.txt"
-    if not os.path.isfile(page_file_dir):
-        f = open(page_file_dir, "w")
-        f.write(str(1) + "\n")
-        f.close()
-    file = open(page_file_dir, "r")
-    page = file.readline()
-    file.close()
-    page = int(page)
+for index, url in enumerate(urls):
     print(f"started fetching '{base_url}{url}' ...")
+    page = 0
 
     count = 0
     stored_exception = None
+    second_chance = False
 
     while True:
+        page += 1
+        page_loaded = Page.objects.filter(url=url, num=page).count() > 0
+        if page_loaded:
+            continue
+
         acts = []
         try:
-            acts = get_act_list_single_page(url,page)
             print(f'fetching page "{base_url}{url}?page={page}"')
+            acts = get_act_list_single_page(url, page)
         except KeyboardInterrupt or SystemExit:
             stored_exception = sys.exc_info()
-        except:
-            print(f'error fetching page "{base_url}{url}?page={page}"')
+            break
+        except Exception as e:
+            print(f'error fetching page "{base_url}{url}?page={page} (error:{e})"')
             continue
+        if len(acts) == 0 and second_chance:
+            break
+        second_chance = len(acts) == 0
         for index_, act in enumerate(acts):
             try:
-                # count += 1
-                # print(f'fetching {act}')
-                status = append_act(act)
-                if status is None:
-                    ws.append([trim(base_url+act)])
-                    wb.save(skipped_files_list_dir)
-                    continue
-                count += 1
-                if count == urls_max[index]:
-                    stored_exception = "None"
-                    break
+                act = get_act_details(act)
+                text = get_act_txt(act['files']['.xht'])
             except KeyboardInterrupt or SystemExit:
                 stored_exception = sys.exc_info()
-            except:
-                print(f'error fetching act {act["pid"]}')
-                ws.append([trim(base_url + act['pid'])])
-                wb.save(skipped_files_list_dir)
+                break
+            except Exception as e:
+                print(f'error fetching act {act["url"]} (error:{e})')
                 continue
-        if stored_exception:
-            break
-        if len(acts) == 0:
-            break
-        page += 1
-        try:
-            f = open(page_file_dir, "w")
-            f.write(str(page) + "\n")
-            f.close()
-        except KeyboardInterrupt or SystemExit:
-            stored_exception = sys.exc_info()
+            if 'skipped' in act.keys():
+                continue
+            count += 1
+            if count == urls_max[index]:
+                stored_exception = "None"
+                end = time.time()
+                print(end - start)
+                break
+            Act.objects.create(url=act['url'], title=act['title'], text=text, type=act['type'], year=act['year'],
+                               number=act['number'])
+
+        Page.objects.create(url=url, num=page)
 
         print(f'total processed acts :{count}')
+        if stored_exception:
+            print("Either user stopped the process or max act count limit reached!")
+            break
+
 
     if stored_exception:
-        print("Either max act count limit reached or user stopped the process!")
+        print("Either user stopped the process or max act count limit reached!")
+        break
 
     print(f"finished fetching '{base_url}{url}' ...")
-
-
-
-
